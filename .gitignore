@@ -1,0 +1,29 @@
+# Ignorem fitxers de claus privades i públiques
+lamport/sk_*.json
+lamport/pk_*.json
+
+wots_plus/sk_*.json
+wots_plus/pk_*.json
+
+mss_lots/sk_*.json
+mss_lots/pk_*.json
+
+sphincs/sk_*.json
+sphincs/pk_*.json
+
+ecc/ecc_private_key.pem
+ecc/ecc_public_key.pem
+
+merkle_ecc/root_merkle.json
+
+# Carpeta temporal de Python
+__pycache__/
+*.pyc
+
+# Fitxers generats en proves
+*.log
+*.tmp
+
+# Entorns virtuals
+venv/
+.env/
