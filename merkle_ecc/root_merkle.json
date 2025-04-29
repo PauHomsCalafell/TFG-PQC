@@ -1,0 +1,27 @@
+{
+    "merkle_root": "64c6f47ade2289d5c491e664e94b15f9a2e552ab8472dfa73d2af5e31ee85bae",
+    "leaves": [
+        "d340b4058362408c9cd431e5f1f335cc22e3d341ebfbb6a739827f16999ad80f",
+        "86a7f81ced6d8b8c29bb074132aa5f6089284e1aaf3df8bc1566ece8af076c8c",
+        "ceab51ab40fb4904ab4127842a3c3bb15ac7ec4f45fbcd397acf0c1642ead171",
+        "1cf1a4c7528a21a823fbdb6017a70db11621226d4b3f1a797eb42844a5b0978a"
+    ],
+    "auth_paths": {
+        "lamport": [
+            "86a7f81ced6d8b8c29bb074132aa5f6089284e1aaf3df8bc1566ece8af076c8c",
+            "6bf3d840ec780c780ef57ddef095b391dfc09d6cdfb0414530809f3ae3ba135a"
+        ],
+        "wots_plus": [
+            "d340b4058362408c9cd431e5f1f335cc22e3d341ebfbb6a739827f16999ad80f",
+            "6bf3d840ec780c780ef57ddef095b391dfc09d6cdfb0414530809f3ae3ba135a"
+        ],
+        "mss_lots": [
+            "1cf1a4c7528a21a823fbdb6017a70db11621226d4b3f1a797eb42844a5b0978a",
+            "85bce93c61269944b88a00f5299d4252cd445c514c11f7e6f6bfe7f9ed50656c"
+        ],
+        "sphincs": [
+            "ceab51ab40fb4904ab4127842a3c3bb15ac7ec4f45fbcd397acf0c1642ead171",
+            "85bce93c61269944b88a00f5299d4252cd445c514c11f7e6f6bfe7f9ed50656c"
+        ]
+    }
+}
