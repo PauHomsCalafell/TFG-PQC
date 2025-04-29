@@ -13,6 +13,8 @@ sphincs/pk_*.json
 
 ecc/ecc_private_key.pem
 ecc/ecc_public_key.pem
+ecc/ecc_private_key_wif.txt
+ecc/ecc_public_key_hex.txt
 
 merkle_ecc/root_merkle.json
 
