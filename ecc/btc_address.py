@@ -1,4 +1,3 @@
-import os
 from bitcoinutils.keys import PrivateKey
 from bitcoinutils.setup import setup
 
@@ -6,7 +5,6 @@ from bitcoinutils.setup import setup
 setup('testnet')    # mainnet per real
                     # testnet per proves
 
-# Funció per carregar la clau privada (WIF)
 def load_private_key(path="ecc/ecc_private_key_wif.txt"):
     
     with open(path, "r") as f:

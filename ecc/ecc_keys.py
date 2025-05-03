@@ -9,7 +9,6 @@ import base58
 setup('testnet')    # mainnet per real
                     # testnet per proves
 
-# Llegeix l'arrel de Merkle
 def load_merkle_root(path="merkle_ecc/root_merkle.json"):
     with open(path, "r") as f:
         data = json.load(f)
