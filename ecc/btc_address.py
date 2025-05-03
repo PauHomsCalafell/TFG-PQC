@@ -1,30 +1,30 @@
-import hashlib
-from cryptography.hazmat.primitives import serialization
+import os
+from bitcoinutils.keys import PrivateKey
+from bitcoinutils.setup import setup
 
-# Carrega la clau pública ECC en format bytes
-def load_public_key(path="ecc/ecc_public_key.pem"):
-    with open(path, "rb") as f:
-        public_key = serialization.load_pem_public_key(f.read())
+# Setup de la xarxa
+setup('testnet')    # mainnet per real
+                    # testnet per proves
 
-    public_numbers = public_key.public_numbers()
-    x = public_numbers.x.to_bytes(32, byteorder='big')
-    y = public_numbers.y.to_bytes(32, byteorder='big')
+# Funció per carregar la clau privada (WIF)
+def load_private_key(path="ecc/ecc_private_key_wif.txt"):
     
-    pubkey_bytes = b'\x04' + x + y  # Format no comprimit
-    return pubkey_bytes
-
-# Fa un hash160 (SHA256 -> RIPEMD160) de la clau pública
-def hash160(data):
-    sha = hashlib.sha256(data).digest()
-    ripe = hashlib.new('ripemd160', sha).digest()
-    return ripe
+    with open(path, "r") as f:
+        wif = f.read().strip()
+    return PrivateKey(wif)
 
 def main():
-    pubkey_bytes = load_public_key()
-    pubkey_hash160 = hash160(pubkey_bytes)
 
-    print("Hash160 de la clau publica (Fake Bitcoin address hash):")
-    print(pubkey_hash160.hex())
+    # Carregar la pk
+    private_key = load_private_key()
+    public_key = private_key.get_public_key()
+
+    # Generar l'adreça P2WPKH
+    address = public_key.get_segwit_address()
+
+    print("Clau Privada (WIF):", private_key.to_wif())
+    print("Clau Publica (hex):", public_key.to_hex())
+    print("Direccio Bitcoin P2WPKH:", address.to_string())
 
 if __name__ == "__main__":
     main()

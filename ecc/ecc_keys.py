@@ -1,57 +1,52 @@
 import os
 import json
 import hashlib
-from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives import serialization
+from bitcoinutils.keys import PrivateKey
+from bitcoinutils.setup import setup
+import base58
 
-# Llegeix l'arrel de Merkle des del fitxer
+# Setup de xarxa
+setup('testnet')    # mainnet per real
+                    # testnet per proves
+
+# Llegeix l'arrel de Merkle
 def load_merkle_root(path="merkle_ecc/root_merkle.json"):
     with open(path, "r") as f:
         data = json.load(f)
     return bytes.fromhex(data["merkle_root"])
 
-# Deriva una clau ECC a partir del hash de l’arrel
-def generate_ecc_key_from_merkle_root(root):
+# Deriva una clau privada Bitcoin a partir del root
+def generate_private_key_from_merkle_root(root):
     sk_hash = hashlib.sha256(root).digest()
-    sk_int = int.from_bytes(sk_hash, "big") % ec.SECP256R1().key_size
+    
+    # Versió 0x80 per mainnet
+    # Versió 0xEF per testnet
+    version_byte = b'\xEF'
 
-    # Crea la clau privada ECC (escalada al rang vàlid)
-    private_key = ec.derive_private_key(sk_int, ec.SECP256R1())
-    public_key = private_key.public_key()
-    return private_key, public_key
+    payload = version_byte + sk_hash
+    checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]
+    wif = base58.b58encode(payload + checksum).decode()
 
-# Desa les claus en fitxers PEM
-def save_keys_to_pem(private_key, public_key, folder):
+    return PrivateKey(wif)
 
-    # Clau privada
-    with open(f"{folder}/ecc_private_key.pem", "wb") as f:
-        f.write(
-            private_key.private_bytes(
-                encoding=serialization.Encoding.PEM,
-                format=serialization.PrivateFormat.TraditionalOpenSSL,
-                encryption_algorithm=serialization.NoEncryption()
-            )
-        )
+# Guarda les claus
+def save_keys_to_files(private_key, folder):
+    os.makedirs(folder, exist_ok=True)
 
-    # Clau pública
-    with open(f"{folder}/ecc_public_key.pem", "wb") as f:
-        f.write(
-            public_key.public_bytes(
-                encoding=serialization.Encoding.PEM,
-                format=serialization.PublicFormat.SubjectPublicKeyInfo
-            )
-        )
+    with open(f"{folder}/ecc_private_key_wif.txt", "w") as f:
+        f.write(private_key.to_wif())
+
+    public_key = private_key.get_public_key()
+    with open(f"{folder}/ecc_public_key_hex.txt", "w") as f:
+        f.write(public_key.to_hex())
 
 def main():
     
-    os.makedirs("ecc", exist_ok=True)
-
     merkle_root = load_merkle_root()
-    private_key, public_key = generate_ecc_key_from_merkle_root(merkle_root)
-    save_keys_to_pem(private_key, public_key, "ecc")
+    private_key = generate_private_key_from_merkle_root(merkle_root)
+    save_keys_to_files(private_key, "ecc")
 
-    print("Clau ECC derivada de l’arrel Merkle creada correctament.")
-    print("Guardada a ecc/ecc_private_key.pem i ecc/ecc_public_key.pem")
+    print("Clau privada i publica Bitcoin generades i guardades correctament.")
 
 if __name__ == "__main__":
     main()
