@@ -26,21 +26,21 @@ def build_merkle_tree(leaves):
         tree.append(new_level)
     return tree
 
-# Obté el camí d'autenticació per una fulla concreta
+# Obté els complementaris
 def get_auth_path(tree, index):
     path = []
     for level in tree[:-1]:
-        sibling_index = index ^ 1  # XOR per trobar el germà
+        sibling_index = index ^ 1  # XOR per trobar la parella
         path.append(level[sibling_index])
         index //= 2
     return path
 
-# Guarda l’arrel, fulles i auth_paths
+# Guarda l’arrel, fulles i complementaris
 def save_merkle_data(scheme_names, leaves, tree, path="merkle_ecc/root_merkle.json"):
     
     root = tree[-1][0]
 
-    auth_paths = {
+    complementaris = {
         scheme_names[i]: [sibling.hex() for sibling in get_auth_path(tree, i)]
         for i in range(len(leaves))
     }
@@ -49,7 +49,7 @@ def save_merkle_data(scheme_names, leaves, tree, path="merkle_ecc/root_merkle.js
         json.dump({
             "merkle_root": root.hex(),
             "leaves": [leaf.hex() for leaf in leaves],
-            "auth_paths": auth_paths
+            "complementaris": complementaris
         }, f, indent=4)
 
 def main():
@@ -76,7 +76,7 @@ def main():
     # Construeix arbre Merkle
     tree = build_merkle_tree(leaves)
 
-    # Guarda arrel i auth_paths
+    # Guarda arrel i complementaris
     save_merkle_data(scheme_names, leaves, tree)
 
     print("Arbre Merkle creat i desat.")
