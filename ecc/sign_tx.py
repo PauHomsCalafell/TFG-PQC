@@ -49,7 +49,7 @@ def main():
     signature_out_file = "signatures/tx_sig.json"
 
     # tx_id de 32 bytes inventat
-    dummy_tx_id = "a0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0".encode().hex()
+    # dummy_tx_id = "a0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0".encode().hex()
 
     tx_id = load_tx_id(tx_id_filename).encode().hex()
     sk = load_private_key(sk_filename)
