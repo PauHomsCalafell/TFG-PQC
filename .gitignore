@@ -15,6 +15,7 @@ ecc/ecc_private_key.pem
 ecc/ecc_public_key.pem
 ecc/ecc_private_key_wif.txt
 ecc/ecc_public_key_hex.txt
+ecc/btc_address.txt
 
 merkle_ecc/root_merkle.json
 
