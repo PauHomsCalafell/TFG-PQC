@@ -29,21 +29,21 @@ def generate_private_key_from_merkle_root(root):
     return PrivateKey(wif)
 
 # Guarda les claus
-def save_keys_to_files(private_key, folder):
-    os.makedirs(folder, exist_ok=True)
+def save_keys_to_files(private_key):
+    os.makedirs("ecc", exist_ok=True)
 
-    with open(f"{folder}/ecc_private_key_wif.txt", "w") as f:
+    with open("ecc/ecc_private_key_wif.txt", "w") as f:
         f.write(private_key.to_wif())
 
     public_key = private_key.get_public_key()
-    with open(f"{folder}/ecc_public_key_hex.txt", "w") as f:
+    with open("ecc/ecc_public_key_hex.txt", "w") as f:
         f.write(public_key.to_hex())
 
 def main():
     
     merkle_root = load_merkle_root()
     private_key = generate_private_key_from_merkle_root(merkle_root)
-    save_keys_to_files(private_key, "ecc")
+    save_keys_to_files(private_key)
 
     print("Clau privada i publica Bitcoin generades i guardades correctament.")
 
