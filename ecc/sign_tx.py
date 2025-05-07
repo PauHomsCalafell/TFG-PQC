@@ -23,18 +23,18 @@ def sign_tx_id(tx_id_hex, priv):
     return signature.hex()
 
 
-def save_signature(tx_id, signature, public_key_hex, filename):
+def save_signature(tx_id, signature, pk_hex, signature_out_file):
     data = {
         "tx_id": tx_id,
         "signature": signature,
-        "public_key": public_key_hex
+        "public_key": pk_hex
     }
 
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    os.makedirs(os.path.dirname(signature_out_file), exist_ok=True)
 
-    with open(filename, "w") as f:
+    with open(signature_out_file, "w") as f:
         json.dump(data, f, indent=4)
-    print(f"Signatura guardada a: {filename}")
+    print(f"Signatura guardada a: {signature_out_file}")
 
 def main():
 
@@ -45,12 +45,12 @@ def main():
     dummy_tx_id = "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0"
 
     sk = load_private_key(sk_filename)
-    pk = sk.get_public_key().to_hex()
+    pk_hex = sk.get_public_key().to_hex(compressed=False)
 
     signature = sign_tx_id(dummy_tx_id, sk)
     print("Signatura generada:", signature)
 
-    save_signature(dummy_tx_id, signature, pk, signature_out_file)
+    save_signature(dummy_tx_id, signature, pk_hex, signature_out_file)
 
 if __name__ == "__main__":
     main()
