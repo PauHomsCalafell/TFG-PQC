@@ -1,11 +1,8 @@
 import hashlib
 import os
+import json
 import binascii
 from ecdsa import VerifyingKey, SECP256k1, BadSignatureError
-
-# Fitxers
-PK_HEX_FILE = "ecc/ecc_public_key_hex.txt"
-SIG_FILE = "signatures/tx_sig_testnet.json"
 
 
 def decompress_pubkey(pubkey_bytes):
@@ -50,21 +47,24 @@ def verify_signature(tx_id, signature_hex, pubkey_hex):
 
 
 def main():
+
+    pk_hex_file = "ecc/ecc_public_key_hex.txt"
+    sig_file = "signatures/tx_sig.json"
+
+
     print("Verificant la signatura...")
 
-    if not os.path.exists(SIG_FILE) or not os.path.exists(PK_HEX_FILE):
+    if not os.path.exists(sig_file) or not os.path.exists(pk_hex_file):
         print("Falten fitxers de signatura o clau publica.")
         return
 
-    with open(SIG_FILE, "r") as f:
-        signature = f.read().strip()
+    with open(sig_file, "r") as f:
+        data = json.load(f)
+        dummy_tx_id = data["tx_id"]
+        signature = data["signature"]
+        public_key = data["public_key"]
 
-    with open(PK_HEX_FILE, "r") as f:
-        pubkey_hex = f.read().strip()
-
-    dummy_tx_id = "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0"
-
-    if verify_signature(dummy_tx_id, signature, pubkey_hex):
+    if verify_signature(dummy_tx_id, signature, public_key):
         print("La signatura es VALIDA.")
     else:
         print("La signatura es INVALIDA.")
