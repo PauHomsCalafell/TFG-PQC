@@ -39,7 +39,7 @@ def save_signature(tx_id, signature, public_key_hex, filename):
 def main():
 
     sk_filename = "ecc/ecc_private_key_wif.txt"
-    signature_out_file = "signatures/tx_sig_testnet.json"
+    signature_out_file = "signatures/tx_sig.json"
 
     # tx_id de 32 bytes inventat
     dummy_tx_id = "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0"
