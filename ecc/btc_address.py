@@ -20,6 +20,9 @@ def main():
     # Generar l'adreça P2WPKH
     address = public_key.get_segwit_address()
 
+    with open("ecc/btc_address.txt", "w") as f:
+        f.write(address.to_string())
+
     print("Clau Privada (WIF):", private_key.to_wif())
     print("Clau Publica (hex):", public_key.to_hex())
     print("Direccio Bitcoin P2WPKH:", address.to_string())
