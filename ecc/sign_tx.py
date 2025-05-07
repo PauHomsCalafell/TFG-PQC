@@ -15,6 +15,12 @@ def load_private_key(path):
     return PrivateKey(wif)
 
 
+def load_tx_id(path):
+    with open(path, "r") as f:
+        tx_id = f.read().strip()
+    return tx_id
+
+
 def sign_tx_id(tx_id_hex, priv):
     sk_bytes = priv.to_bytes()  # Extreu els bytes de la sk
     sk = SigningKey.from_string(sk_bytes, curve=SECP256k1)
@@ -39,18 +45,20 @@ def save_signature(tx_id, signature, pk_hex, signature_out_file):
 def main():
 
     sk_filename = "ecc/ecc_private_key_wif.txt"
+    tx_id_filename = "ecc/btc_address.txt"
     signature_out_file = "signatures/tx_sig.json"
 
     # tx_id de 32 bytes inventat
-    dummy_tx_id = "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0"
+    dummy_tx_id = "a0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff0".encode().hex()
 
+    tx_id = load_tx_id(tx_id_filename).encode().hex()
     sk = load_private_key(sk_filename)
     pk_hex = sk.get_public_key().to_hex(compressed=False)
 
-    signature = sign_tx_id(dummy_tx_id, sk)
+    signature = sign_tx_id(tx_id, sk)
     print("Signatura generada:", signature)
 
-    save_signature(dummy_tx_id, signature, pk_hex, signature_out_file)
+    save_signature(tx_id, signature, pk_hex, signature_out_file)
 
 if __name__ == "__main__":
     main()
