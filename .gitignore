@@ -18,6 +18,10 @@ ecc/ecc_public_key_hex.txt
 
 merkle_ecc/root_merkle.json
 
+signatures/
+
+test_signatures/
+
 # Carpeta temporal de Python
 __pycache__/
 *.pyc
