@@ -20,7 +20,9 @@ def main():
         "sphincs/sphincs_temp.py",
         "merkle_ecc/build_merkle_tree.py",
         "ecc/ecc_keys.py",
-        "ecc/btc_address.py"
+        "ecc/btc_address.py",
+        #"ecc/sign_tx.py",
+        #"ecc/verify_tx.py"
     ]
 
     for script in scripts:
