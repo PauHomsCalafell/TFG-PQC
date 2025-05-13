@@ -7,12 +7,20 @@ import os
 N_BITS = 256
 SEED_SIZE = 32  # Mida de cada preimatge (clau privada): 32 bytes = 256 bits
 
-# Funció hash (SHA-256)
 def H(data):
+    """
+    Descripció: Aplica SHA-256 sobre les dades d'entrada.
+    Args: data (bytes): Dades a hashejar.
+    Return: bytes: Digest SHA-256.
+    """
     return hashlib.sha256(data).digest()
 
-# Generació de claus Lamport OTS
 def lamport_keygen():
+    """
+    Genera un parell de claus Lamport OTS (sk0, sk1, pk0, pk1).
+    Return:
+        tuple: Llistes de claus secretes i públiques.
+    """
     sk0, sk1, pk0, pk1 = [], [], [], []
     for _ in range(N_BITS):
         s0 = secrets.token_bytes(SEED_SIZE)
@@ -23,34 +31,26 @@ def lamport_keygen():
         pk1.append(H(s1))
     return sk0, sk1, pk0, pk1
 
-# Firma Lamport d’un missatge (digest de 256 bits)
-def lamport_sign(message, sk0, sk1):
-    sig = []
-    for i in range(N_BITS):
-        byte_index = i // 8
-        bit_index = 7 - (i % 8)
-        bit = (message[byte_index] >> bit_index) & 1
-        sig.append(sk0[i] if bit == 0 else sk1[i])
-    return sig
-
-# Verificació de la firma Lamport
-def lamport_verify(message, sig, pk0, pk1):
-    for i in range(N_BITS):
-        byte_index = i // 8
-        bit_index = 7 - (i % 8)
-        bit = (message[byte_index] >> bit_index) & 1
-        hashed = H(sig[i])
-        if (bit == 0 and hashed != pk0[i]) or (bit == 1 and hashed != pk1[i]):
-            return False
-    return True
-
-# Hash de la clau pública Lamport (concatena tots els pk0 i pk1 i obté un hash global)
 def hash_lamport_pk(pk0, pk1):
+    """
+    Agrega i fa hash de la clau pública Lamport.
+    Args:
+        pk0 (list[bytes]): Part de la clau pública per bits 0.
+        pk1 (list[bytes]): Part de la clau pública per bits 1.
+    Return:
+        bytes: Hash global de la clau pública.
+    """
     data = b''.join(pk0 + pk1)
     return H(data)
 
-# Construcció de l’arbre de Merkle a partir de les fulles (hash de claus públiques)
 def build_merkle_tree(leaf_nodes):
+    """
+    Construeix un arbre de Merkle a partir dels fulles.
+    Args:
+        leaf_nodes (list[bytes]): Llistat de hashes de claus públiques.
+    Return:
+        list[list[bytes]]: Llista de nivells de l’arbre.
+    """
     tree = [leaf_nodes[:]]
     while len(tree[-1]) > 1:
         prev_level = tree[-1]
@@ -62,8 +62,15 @@ def build_merkle_tree(leaf_nodes):
         tree.append(new_level)
     return tree
 
-# Obtenció del camí d’autenticació (auth path) des de una fulla fins a l’arrel
 def get_auth_path(tree, index):
+    """
+    Obté el camí d'autenticació (auth path) des d'una fulla de Merkle.
+    Args:
+        tree (list[list[bytes]]): Arbre de Merkle.
+        index (int): Índex de la fulla.
+    Return:
+        list[bytes]: Llista de nodes germans per autenticar.
+    """
     path = []
     for level in tree[:-1]:
         sibling_index = index ^ 1  # node germà (XOR amb 1)
@@ -71,19 +78,15 @@ def get_auth_path(tree, index):
         index //= 2
     return path
 
-# Recalcular l’arrel de l’arbre donat un camí d’autenticació
-def compute_root_from_auth(leaf, auth_path, index):
-    current = leaf
-    for sibling in auth_path:
-        if index % 2 == 0:
-            current = H(current + sibling)
-        else:
-            current = H(sibling + current)
-        index //= 2
-    return current
-
 # Generació de totes les claus (Lamport) i arbre de Merkle
 def mss_keygen(h=4):
+    """
+    Genera claus Lamport i construeix l’arbre de Merkle (MSS).
+    Args:
+        h (int): Alçada de l’arbre de Merkle (2^h fulles).
+    Return:
+        tuple: (lamport_keys, tree, root) per signatura i verificació.
+    """
     num_keys = 2**h
     lamport_keys = []
     leaf_hashes = []
@@ -97,25 +100,16 @@ def mss_keygen(h=4):
     root = tree[-1][0]  # l’arrel és l’únic node de l’últim nivell
     return lamport_keys, tree, root
 
-# Signatura d’un missatge amb una clau Lamport concreta (índex de fulla)
-def mss_sign(message, lamport_keys, tree, index):
-    sk0, sk1, pk0, pk1 = lamport_keys[index]
-    sig = lamport_sign(message, sk0, sk1)
-    pk = (pk0, pk1)
-    auth_path = get_auth_path(tree, index)
-    return index, sig, pk, auth_path
-
-# Verificació completa (firma Lamport + autenticació Merkle)
-def mss_verify(message, index, sig, pk, auth_path, root):
-    pk0, pk1 = pk
-    if not lamport_verify(message, sig, pk0, pk1):
-        return False
-    leaf = hash_lamport_pk(pk0, pk1)
-    recomputed_root = compute_root_from_auth(leaf, auth_path, index)
-    return recomputed_root == root
-
 # Guarda claus privades i arrel de Merkle en fitxers JSON
 def save_mss_keys(lamport_keys, root, sk_filename, pk_filename):
+    """
+    Guarda claus MSS i l'arrel en fitxers JSON.
+    Args:
+        lamport_keys (list): Claus Lamport generades.
+        root (bytes): Arrel de l’arbre Merkle.
+        sk_filename (str): Fitxer per la clau privada.
+        pk_filename (str): Fitxer per la clau pública.
+    """
 
     private_data = {
         "lamport_keys": [
@@ -140,26 +134,11 @@ def save_mss_keys(lamport_keys, root, sk_filename, pk_filename):
     with open(pk_filename, "w") as f:
         json.dump(public_data, f, indent=4)
 
-# Carrega claus des de fitxers JSON
-def load_mss_keys(sk_filename, pk_filename):
-    with open(sk_filename, "r") as f:
-        private_data = json.load(f)
-
-    lamport_keys = []
-    for entry in private_data["lamport_keys"]:
-        sk0 = [bytes.fromhex(x) for x in entry["sk0"]]
-        sk1 = [bytes.fromhex(x) for x in entry["sk1"]]
-        pk0 = [bytes.fromhex(x) for x in entry["pk0"]]
-        pk1 = [bytes.fromhex(x) for x in entry["pk1"]]
-        lamport_keys.append((sk0, sk1, pk0, pk1))
-
-    with open(pk_filename, "r") as f:
-        public_data = json.load(f)
-    root = bytes.fromhex(public_data["root"])
-
-    return lamport_keys, root
 
 def main():
+    """
+    Genera claus MSS (Lamport + Merkle) i les guarda en fitxers JSON.
+    """
     
     os.makedirs("mss_lots", exist_ok=True)
 

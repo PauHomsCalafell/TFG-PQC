@@ -44,13 +44,13 @@ def lamport_keygen():
 
 def save_lamport_key(sk0, sk1, pk0, pk1, SK_filename, PK_filename):
     """
-        Desa les claus Lamport en fitxers JSON.
+        Guarda les claus Lamport en fitxers JSON.
         Args:   sk0 (list[bytes]): Claus secretes sk0.
                 sk1 (list[bytes]): Claus secretes sk1.
                 pk0 (list[bytes]): Claus públiques pk0.
                 pk1 (list[bytes]): Claus públiques pk1.
-                SK_filename (str): Ruta del fitxer on desar les claus secretes.
-                PK_filename (str): Ruta del fitxer on desar les claus públiques.
+                SK_filename (str): Ruta del fitxer on guardar les claus secretes.
+                PK_filename (str): Ruta del fitxer on guardar les claus públiques.
     """
 
     # S'ha de convertir a hex per guardar-la
@@ -76,7 +76,7 @@ def save_lamport_key(sk0, sk1, pk0, pk1, SK_filename, PK_filename):
 
 def main():
     """
-    Genera i desa claus Lamport. Crea la carpeta 'lamport' i escriu les claus
+    Genera i guarda claus Lamport. Crea la carpeta 'lamport' i escriu les claus
     generades en fitxers JSON.
     """
 

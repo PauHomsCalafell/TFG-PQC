@@ -10,31 +10,70 @@ N = 256  # Ja que utilitzo SHA-256
 SEED_SIZE = 32
 LOG_W = int(math.log2(W))
 
-# Funció hash
 def H(data):
+    """
+    Descripció: Aplica SHA-256 sobre les dades d'entrada.
+    Args: data (bytes): Dades a hashejar.
+    Return: bytes: Digest SHA-256.
+    """
     return hashlib.sha256(data).digest()
 
-# PseudoRandomGenerator per generar claus i màscares
 def prg(seed, total):
+    """
+    Genera una llista de valors pseudoaleatoris mitjançant una PRG basada en SHA-256.
+    Args:
+        seed (bytes): Llavor inicial.
+        total (int): Nombre total de valors a generar.
+    Return:
+        list[bytes]: Llista de valors pseudoaleatoris.
+    """
     return [H(seed + i.to_bytes(4, 'big')) for i in range(total)]
 
-# Funció de cadena amb màscares XOR
+
 def chain_function(x, r_list, steps):
+    """
+    Aplica la funció de cadena amb màscares XOR, fent 'steps' iteracions.
+    Args:
+        x (bytes): Valor inicial.
+        r_list (list[bytes]): Màscares XOR per cada pas.
+        steps (int): Nombre de passos a aplicar.
+    Return:
+        bytes: Valor final després de la cadena.
+    """
     result = x
     for i in range(steps):
         result = H(bytes(a ^ b for a, b in zip(result, r_list[i]))) # El simbol ^ es la XOR
     return result
 
-# Conversió a base w
 def to_base_w(value, digits):
+    """
+    Converteix un enter a la seva representació en base W.
+    Args:
+        value (int): Valor a convertir.
+        digits (int): Nombre de dígits desitjat.
+    Return:
+        list[int]: Representació en base w (llista de dígits).
+    """
+
     output = []
     for _ in range(digits):
         output.append(value % W)
         value //= W
     return output[::-1] # Invertida
 
-# Generació de clau WOTS+ a partir d’una sola llavor (llavor secreta i màscares públiques)
+
 def wots_plus_keygen(seed=None):
+    """
+    Genera claus WOTS+ a partir d'una llavor opcional.
+    Args:
+        seed (bytes, optional): Llavor d'entrada. Si és None, es genera aleatòriament.
+    Return:
+        tuple: (sk, r_masks, pk, L)
+            sk (list[bytes]): Claus secretes.
+            r_masks (list[list[bytes]]): Màscares públiques per cada pas.
+            pk (list[bytes]): Claus públiques.
+            L (int): Longitud del vector de claus.
+    """
     if seed is None:
         seed = secrets.token_bytes(SEED_SIZE)
 
@@ -54,8 +93,17 @@ def wots_plus_keygen(seed=None):
 
     return sk, r_masks, pk, L
 
-# Guardar claus a JSON
 def save_winternitz_keys(sk, r_masks, pk, sk_file, pk_file):
+    """
+    Guarda les claus WOTS+ en fitxers JSON.
+    Args:
+        sk (list[bytes]): Claus secretes.
+        r_masks (list[list[bytes]]): Màscares públiques.
+        pk (list[bytes]): Claus públiques.
+        sk_file (str): Fitxer de sortida per les claus secretes.
+        pk_file (str): Fitxer de sortida per les claus públiques.
+    """
+
     with open(sk_file, "w") as f:
         json.dump({
             "sk": [s.hex() for s in sk],
@@ -72,6 +120,9 @@ def save_winternitz_keys(sk, r_masks, pk, sk_file, pk_file):
 
 
 def main():
+    """
+    Genera claus WOTS+ i les guarda als fitxers JSON dins la carpeta 'wots_plus'.
+    """
 
     os.makedirs("wots_plus", exist_ok=True)
 
