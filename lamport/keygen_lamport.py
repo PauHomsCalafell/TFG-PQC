@@ -6,11 +6,24 @@ import os
 N_BITS = 256 # Ja que utilitzo SHA-256
 SEED_SIZE = 32   # 32 bytes = 256 bits per seed (preimatge)
 
-# Funció hash
+
 def H(data):
+    """
+    Descripció: Aplica SHA-256 sobre les dades d'entrada.
+    Args: data (bytes): Dades a hashejar.
+    Return: bytes: Digest SHA-256.
+    """
     return hashlib.sha256(data).digest()
 
+
+
+
 def lamport_keygen():
+    """ Descripció: Genera un parell de claus secretes i públiques Lamport OTS.
+        Return: tuple: (sk0, sk1, pk0, pk1) on:
+                sk0, sk1: llistes de claus secretes (256 elements).
+                pk0, pk1: llistes de claus públiques corresponents.
+    """
 
     sk0, sk1, pk0, pk1 = [], [], [], []
     
@@ -27,7 +40,18 @@ def lamport_keygen():
     return sk0, sk1, pk0, pk1
 
 
+
+
 def save_lamport_key(sk0, sk1, pk0, pk1, SK_filename, PK_filename):
+    """
+        Desa les claus Lamport en fitxers JSON.
+        Args:   sk0 (list[bytes]): Claus secretes sk0.
+                sk1 (list[bytes]): Claus secretes sk1.
+                pk0 (list[bytes]): Claus públiques pk0.
+                pk1 (list[bytes]): Claus públiques pk1.
+                SK_filename (str): Ruta del fitxer on desar les claus secretes.
+                PK_filename (str): Ruta del fitxer on desar les claus públiques.
+    """
 
     # S'ha de convertir a hex per guardar-la
     sk_data = {
@@ -51,6 +75,10 @@ def save_lamport_key(sk0, sk1, pk0, pk1, SK_filename, PK_filename):
 
 
 def main():
+    """
+    Genera i desa claus Lamport. Crea la carpeta 'lamport' i escriu les claus
+    generades en fitxers JSON.
+    """
 
     os.makedirs("lamport", exist_ok=True)
     
