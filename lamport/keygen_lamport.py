@@ -91,7 +91,7 @@ def main():
 
     # Guardar
     save_lamport_key(sk0, sk1, pk0, pk1, SkFile, PkFile)
-    print(f"Claus generades i guardades en {SkFile} i {PkFile}")
+    print(f"Claus Lamport generades i guardades en {SkFile} i {PkFile}")
 
 
 if __name__ == "__main__":
