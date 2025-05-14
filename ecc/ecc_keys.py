@@ -70,7 +70,7 @@ def main():
     private_key = generate_private_key_from_merkle_root(merkle_root)
     save_keys_to_files(private_key)
 
-    print("Clau privada i publica Bitcoin generades i guardades correctament.")
+    print("Clau privada i publica ECC Bitcoin generades i guardades correctament.")
 
 if __name__ == "__main__":
     main()
