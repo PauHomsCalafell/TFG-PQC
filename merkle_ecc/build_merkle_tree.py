@@ -79,7 +79,7 @@ def main():
     # Guarda arrel i complementaris
     save_merkle_data(scheme_names, leaves, tree)
 
-    print("Arbre Merkle creat i desat.")
+    print("Arbre Merkle creat i guardat.")
     print("Arrel:", tree[-1][0].hex())
 
 if __name__ == "__main__":
