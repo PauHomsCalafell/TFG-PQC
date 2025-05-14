@@ -4,6 +4,16 @@ import hashlib
 
 
 def verify_signature(tx_id, signature_hex, pubkey_hex):
+    """
+    Verifica la signatura d'una transacció utilitzant la clau pública corresponent.
+    Args:
+        tx_id (str): L'ID de la transacció en format hexadecimal.
+        signature_hex (str): La signatura de la transacció en format hexadecimal.
+        pubkey_hex (str): La clau pública en format hexadecimal.
+    Return:
+        bool: Retorna True si la signatura és vàlida, False si no ho és.
+    """
+
     try:
         tx_bytes = bytes.fromhex(tx_id)
         signature_bytes = bytes.fromhex(signature_hex)
@@ -22,6 +32,9 @@ def verify_signature(tx_id, signature_hex, pubkey_hex):
         return False
 
 def main():
+    """
+    Funció principal que carrega una signatura des d'un fitxer JSON i verifica la seva validesa.
+    """
 
     sig_file = "signatures/tx_sig.json"
 
