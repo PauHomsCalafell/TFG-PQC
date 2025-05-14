@@ -135,7 +135,7 @@ def main():
 
     # Guardar
     save_winternitz_keys(sk, r_masks, pk, SkFile, PkFile)
-    print(f"Claus generades i guardades en {SkFile} i {PkFile}")
+    print(f"Claus WOTS generades i guardades en {SkFile} i {PkFile}")
 
 
 if __name__ == "__main__":

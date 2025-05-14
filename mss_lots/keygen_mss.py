@@ -151,7 +151,7 @@ def main():
 
     # Guardar
     save_mss_keys(lamport_keys, root, SkFile, PkFile)
-    print(f"Claus generades i guardades en {SkFile} i {PkFile}")
+    print(f"Claus MSS generades i guardades en {SkFile} i {PkFile}")
 
 if __name__ == "__main__":
     main()
