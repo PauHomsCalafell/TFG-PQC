@@ -29,13 +29,16 @@ def main():
     generate_wots_keys()
     generate_mss_keys()
     generate_sphincs_keys()
+    print()
 
     # 2. Construcció de l'arbre de Merkle i obtenció de l'arrel
     build_merkle_tree()
+    print()
 
     # 3. Derivació de la clau privada ECC i guardat
     generate_ecc_keys_from_merkle_root()
-
+    print()
+    
     # 4. Generació de l'adreça Bitcoin i guardat
     generate_btc_address()
 
