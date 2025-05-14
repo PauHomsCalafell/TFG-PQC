@@ -87,5 +87,5 @@ Cada esquema de signatura es troba encapsulat en el seu propi mòdul i es pot ex
 ## Autor
 
 TFG – Grau en Enginyeria Informàtica, Universitat Autònoma de Barcelona  
-Tema: Digests as Secret Keys (DASK) for PQC solutions
+Tema: Digests as Secret Keys (DASK) for PQC solutions  
 Pau Homs Calafell
