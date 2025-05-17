@@ -56,7 +56,7 @@ def sign_tx_id(tx_id_hex, priv):
 
 def save_signature(tx_id, signature, pk_hex, signature_out_file):
     """
-    Guarda la signatura i les dades associades en un fitxer JSON.
+    Guarda les signatures de transaccions en un fitxer JSON, afegint noves signatures sense sobrescriure les anteriors.
     Args:
         tx_id (str): L'ID de la transacció signada.
         signature (str): La signatura de la transacció.
@@ -64,11 +64,19 @@ def save_signature(tx_id, signature, pk_hex, signature_out_file):
         signature_out_file (str): Ruta on es guarda el fitxer de sortida.
     """
 
-    data = {
+    # Comprovació si el fitxer ja existeix
+    if os.path.exists(signature_out_file):
+        with open(signature_out_file, "r") as f:
+            data = json.load(f)
+    else:
+        # Si no existeix, inicialitzar la llista
+        data = {"signatures": []}
+
+    data["signatures"].append({
         "tx_id": tx_id,
         "signature": signature,
         "public_key": pk_hex
-    }
+    })
 
     os.makedirs(os.path.dirname(signature_out_file), exist_ok=True)
 
