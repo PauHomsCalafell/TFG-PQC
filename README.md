@@ -66,11 +66,27 @@ Cada esquema de signatura es troba encapsulat en el seu propi mòdul i es pot ex
 
 ---
 
+## 🔑 **Gestió de Signatures de Transaccions**
+
+El projecte també inclou la gestió de **signatures de transaccions** en fitxers JSON. Amb aquesta funcionalitat:
+
+- **Generació de Signatures**: Quan es signa una transacció, la signatura, l'ID de la transacció (`tx_id`) i la clau pública es guarden en un fitxer JSON. Aquest fitxer pot contenir múltiples signatures per a diferents transaccions.
+  
+- **Afegir Signatures**: Si el fitxer de signatures ja existeix, les noves signatures es **afegeixen** a la llista de signatures existents, en comptes de sobrescriure-les.
+
+- **Verificació de Signatures**: Es pot verificar la signatura de qualsevol transacció filtrant pel seu `tx_id` específic. Només es verifica la signatura associada a aquest `tx_id`.
+
+---
+
 ## Requisits
 
 - Python 3.8+
-- Llibreries estàndard (hashlib, secrets, json, os)
-
+- Llibreries principals:
+    - `bitcoinutils`
+    - `ecdsa`
+    - `base58`
+    - `hashlib`
+    - `json`
 ---
 
 ## Estat actual
