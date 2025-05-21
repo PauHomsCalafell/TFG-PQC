@@ -32,7 +32,7 @@ Cada esquema de signatura es troba encapsulat en el seu propi mòdul i es pot ex
 
 ### `sphincs/keygen_sphincs.py` (actualment `sphincs_temp.py`)
 
-- **`generate_sphincs_keypair()`**: Genera claus públiques i privades falses (per simulació).
+- **`generate_sphincs_keypair()`**: Genera claus públiques i privades a partir d'una llibreria d'SPHINCS+ i una llavor aleatòria.
 - **`save_sphincs_keys()`**: Desa les claus en fitxers `.json`.
 - **`main()`**: Desa fitxers dins `sphincs/`.
 
