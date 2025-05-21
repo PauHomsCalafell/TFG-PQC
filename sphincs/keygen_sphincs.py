@@ -1,5 +1,6 @@
 import json
 import hashlib
+import secrets
 import pyspx.sha2_128s as sphincs  # SPHINCS+ variant: 128-bit security with SHA-2
 
 def save_sphincs_keys(sk, pk, sk_file, pk_file):
@@ -18,8 +19,10 @@ def main():
     SkFile = "sphincs/sk_Sphincs.json"
     PkFile = "sphincs/pk_Sphincs.json"
 
+    seed = secrets.token_bytes(48)
+
     # Generació de claus
-    pk, sk = sphincs.generate_keypair() # Funció de la llibreria
+    pk, sk = sphincs.generate_keypair(seed) # Funció de la llibreria
 
     save_sphincs_keys(sk, pk, SkFile, PkFile)
     print(f"Claus SPHINCS+ generades i guardades en {SkFile} i {PkFile}")
