@@ -10,7 +10,8 @@ Executa de forma ordenada els passos següents:
 from lamport.keygen_lamport import main as generate_lamport_keys
 from wots_plus.keygen_wots_plus import main as generate_wots_keys
 from mss_lots.keygen_mss import main as generate_mss_keys
-from sphincs.sphincs_temp import main as generate_sphincs_keys
+from sphincs.sphincs_temp import main as generate_temp_sphincs_keys
+from sphincs.keygen_sphincs import main as generate_sphincs_keys
 from merkle_ecc.build_merkle_tree import main as build_merkle_tree
 from ecc.ecc_keys import main as generate_ecc_keys_from_merkle_root
 from ecc.btc_address import main as generate_btc_address
@@ -28,6 +29,7 @@ def main():
     generate_lamport_keys()
     generate_wots_keys()
     generate_mss_keys()
+    #generate_temp_sphincs_keys() #Nomes si s'utilitza windows
     generate_sphincs_keys()
     print()
 
