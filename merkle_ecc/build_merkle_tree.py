@@ -61,7 +61,7 @@ def main():
         "lamport": "lamport/pk_Lamport.json",
         "wots_plus": "wots_plus/pk_Winternitz.json",
         "mss_lots": "mss_lots/pk_MSS.json",
-        "sphincs": "sphincs/pk_SPHINCS.json"
+        "sphincs": "sphincs/pk_Sphincs.json"
     }
 
     # Carrega els pk_hash de cada esquema
