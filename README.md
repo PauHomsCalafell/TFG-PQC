@@ -87,6 +87,7 @@ El projecte també inclou la gestió de **signatures de transaccions** en fitxer
     - `base58`
     - `hashlib`
     - `json`
+    - `pyspx`
     
 ---
 
