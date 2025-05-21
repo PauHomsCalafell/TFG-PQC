@@ -46,8 +46,8 @@ def main():
     
     os.makedirs("sphincs", exist_ok=True)
 
-    sk_file = "sphincs/sk_SPHINCS.json"
-    pk_file = "sphincs/pk_SPHINCS.json"
+    sk_file = "sphincs/sk_Sphincs.json"
+    pk_file = "sphincs/pk_Sphincs.json"
 
     pk, sk = generate_sphincs_keypair()
     save_sphincs_keys(sk, pk, sk_file, pk_file)
